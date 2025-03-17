@@ -21,3 +21,13 @@ To get this project up and running locally on your machine, follow the steps bel
 1. **Clone the repository** to your local machine using Git:
    ```bash
    https://github.com/AggeSak/2DGames.git
+
+2.### **Usage** <a name="usage"></a>
+To use this project navigade with cd command to the game of your choice and run the html file of your choice
+
+3. ### **Features** <a name="features"></a>
+
+4. ### **Images of the Games** <a name="screenshots"></a>
+![Tic Tac Toe Game](images/tic-tac-toe.png)
+![Calculator Game](Images/Calculator.png)
+
