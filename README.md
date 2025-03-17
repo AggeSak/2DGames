@@ -20,4 +20,4 @@ To get this project up and running locally on your machine, follow the steps bel
 
 1. **Clone the repository** to your local machine using Git:
    ```bash
-   git clone https://github.com/your-username/tic-tac-toe.git
+   https://github.com/AggeSak/2DGames.git
