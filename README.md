@@ -20,7 +20,7 @@ To get this project up and running locally on your machine, follow the steps bel
    ```bash
    https://github.com/AggeSak/2DGames.git
 
-2.### **Usage** <a name="usage"></a>
+2. **Usage** <a name="usage"></a>
 To use this project navigade with cd command to the game of your choice and run the html file of your choice
 
 3. ### **Features** <a name="features"></a>
