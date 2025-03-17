@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Ensures it fills the viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 10px 0;
+        }
+
+        canvas {
+            border: 2px solid white;
+            margin-top: 20px;
+        }
+
+        .scoreboard {
+            font-size: 18px; /* Smaller text for better fit */
+        }
+
+        .level {
+            font-size: 20px;
+            color: red;
+        }
+
+        .game-over {
+            font-size: 24px;
+            color: yellow;
+            margin-top: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .scoreboard {
+                font-size: 14px;
+            }
+            .level {
+                font-size: 18px;
+            }
+            .game-over {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Snake Game</h1>
+    <div class="scoreboard">
+        <p>High Score: <span id="high-score">0</span></p>
+        <p class="level">Level: <span id="level">1</span></p>
+        <p>Score: <span id="score">0</span></p>
+    </div>
+
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <div class="game-over" style="display: none;">Game Over! Press 'R' to Restart</div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const box = 20;  // Smaller box size to fit the canvas better
+        const canvasSize = canvas.width;
+        const totalBoxes = canvasSize / box;
+
+        let snake;
+        let food;
+        let score;
+        let level;
+        let highScore;
+        let gameOver;
+
+        const directions = {
+            right: { x: 1, y: 0 },
+            left: { x: -1, y: 0 },
+            up: { x: 0, y: -1 },
+            down: { x: 0, y: 1 }
+        };
+
+        let currentDirection;
+        let gameSpeed;
+        let interval;
+
+        window.addEventListener("keydown", changeDirection);
+        document.addEventListener("keydown", restartGame);
+
+        function restartGame(event) {
+            if (gameOver && event.key === 'r') {
+                resetGame();
+                startGame();
+            }
+        }
+
+        function resetGame() {
+            snake = [{ x: 9 * box, y: 9 * box }];
+            score = 0;
+            level = 1;
+            currentDirection = directions.right;
+            gameSpeed = 150; 
+            gameOver = false;
+            food = spawnFood();
+            document.querySelector('.game-over').style.display = 'none';
+            document.getElementById('score').textContent = score;
+            document.getElementById('level').textContent = level;
+        }
+
+        function startGame() {
+            if (interval) clearInterval(interval); 
+            interval = setInterval(gameLoop, gameSpeed); 
+        }
+
+        function gameLoop() {
+            clearCanvas();
+            drawSnake();
+            moveSnake();
+            drawFood();
+            checkCollisions();
+            updateScore();
+            checkLevel();
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvasSize, canvasSize);
+        }
+
+        function drawSnake() {
+            snake.forEach((segment, index) => {
+                ctx.fillStyle = index === 0 ? 'red' : 'blue';
+                ctx.fillRect(segment.x, segment.y, box, box);
+            });
+        }
+
+        function moveSnake() {
+            const head = {
+                x: snake[0].x + currentDirection.x * box,
+                y: snake[0].y + currentDirection.y * box
+            };
+
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                food = spawnFood();
+                score++;
+                // Increase speed after each food eaten 
+                if (gameSpeed > 30) {
+                    gameSpeed -= 2;
+                    updateGameSpeed();
+                }
+            } else {
+                snake.pop();
+            }
+        }
+
+        function spawnFood() {
+            let x = Math.floor(Math.random() * totalBoxes) * box;
+            let y = Math.floor(Math.random() * totalBoxes) * box;
+            return { x, y };
+        }
+
+        function drawFood() {
+            ctx.fillStyle = 'yellow';
+            ctx.fillRect(food.x, food.y, box, box);
+        }
+
+        function changeDirection(event) {
+            if (event.key === 'ArrowRight' && currentDirection !== directions.left) {
+                currentDirection = directions.right;
+            } else if (event.key === 'ArrowLeft' && currentDirection !== directions.right) {
+                currentDirection = directions.left;
+            } else if (event.key === 'ArrowUp' && currentDirection !== directions.down) {
+                currentDirection = directions.up;
+            } else if (event.key === 'ArrowDown' && currentDirection !== directions.up) {
+                currentDirection = directions.down;
+            }
+        }
+
+        function checkCollisions() {
+            const head = snake[0];
+
+            // Collision with walls
+            if (head.x < 0 || head.x >= canvasSize || head.y < 0 || head.y >= canvasSize) {
+                endGame();
+            }
+
+            // Collision with self
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    endGame();
+                }
+            }
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function checkLevel() {
+            if (score >= 5 && level === 1) {
+                level = 2;
+                document.getElementById('level').textContent = level;
+            } else if (score >= 10 && level === 2) {
+                level = 3;
+                document.getElementById('level').textContent = level;
+            } else if (score >= 15 && level === 3) {
+                level = 4;
+                document.getElementById('level').textContent = level;
+            }
+
+            if (score > highScore) {
+                highScore = score;
+                document.getElementById('high-score').textContent = highScore;
+            }
+        }
+
+        function endGame() {
+            clearInterval(interval);
+            gameOver = true;
+            document.querySelector('.game-over').style.display = 'block';
+        }
+
+        function updateGameSpeed() {
+            
+            clearInterval(interval);
+            interval = setInterval(gameLoop, gameSpeed);
+        }
+
+        resetGame();
+        startGame();
+    </script>
+</body>
+</html>
