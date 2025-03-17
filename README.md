@@ -28,6 +28,6 @@ To use this project navigade with cd command to the game of your choice and run 
 3. ### **Features** <a name="features"></a>
 
 4. ### **Images of the Games** <a name="screenshots"></a>
-![Tic Tac Toe Game](images/tic-tac-toe.png)
-![Calculator Game](Images/Calculator.png)
+
+<img src="Images/Calculator.png" alt="Calculator" width="50%" />
 
