@@ -3,6 +3,33 @@
 <html>
 <head> 
 
+<style>
+    body{
+        background-color: lightblue;
+        text-align: center;
+    }
+    h1{
+        color: darkblue;
+        font-size: 50px;
+        margin-top: 20px;
+    }
+    input[type="button"]{
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        margin: 5px;
+        border: 2px solid darkblue;
+        border-radius: 5px;
+        background-color: lightgray;
+    }
+    .grid-container {
+            border: 3px solid darkblue;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+</style>
 
 </head>
 <body>
@@ -10,27 +37,224 @@
 <h1> Tic Tac Toe </h1>
 
 
-    
-        <br>
-        <input type="button" button id="0" value="" onclick="document.getElementById('0').value = 'X'">
-        <input type="button" button id="1" value="" onclick="document.getElementById('1').value = 'X'">
-        <input type="button" button id="2" value="" onclick="document.getElementById('2').value = 'X'">
-        <input type="button" button id="3" value="" onclick="document.getElementById('3').value = 'X'">
-        <br>
-        <br>
-        <input type="button" button id="4" value="" onclick="document.getElementById('4').value = 'X'">
-        <input type="button" button id="5" value="" onclick="document.getElementById('5').value = 'X'">
-        <input type="button" button id="6" value="" onclick="document.getElementById('6').value = 'X'">
-        <input type="button" button id="7" value="" onclick="document.getElementById('7').value = 'X'">
-        <br>
-        <br>
-        <input type="button" button id="8" value="" onclick="document.getElementById('8').value = 'X'">
-        <input type="button" button id="9" value="" onclick="document.getElementById('9').value = 'X'">
-        <input type="button" button id="10" value="" onclick="document.getElementById('10').value = 'X'">
-        <input type="button" button id="11" value="" onclick="document.getElementById('11').value = 'X'">
-        <br>
         
-<h2> Go to scientific mode</h2>
+<div class="grid-container">
+        <div class="grid">
+            <br>
+            <input type="button" id="1" value="" onclick="addXorO(1)">
+            <input type="button" id="2" value="" onclick="addXorO(2)">
+            <input type="button" id="3" value="" onclick="addXorO(3)">
+            <br>
+            <input type="button" id="4" value="" onclick="addXorO(4)">
+            <input type="button" id="5" value="" onclick="addXorO(5)">
+            <input type="button" id="6" value="" onclick="addXorO(6)">
+            <br>
+            <input type="button" id="7" value="" onclick="addXorO(7)">
+            <input type="button" id="8" value="" onclick="addXorO(8)">
+            <input type="button" id="9" value="" onclick="addXorO(9)">
+        </div>
+    </div> 
+
+        <script>
+                // Function to evaluate the expression safely
+                flag = 0;
+                function addXorO(input){
+
+                        let button = document.getElementById(input);
+                        if(button.value == "" && flag==0 ){
+                                button.value = "X"; flag=1;
+                        }else if(button.value == "" && flag==1){
+                                button.value = "O"; flag=0;
+                        }else{
+                                button.value = "";
+                        }
+                        Winner();
+                }
+
+
+                async function Winner() {
+                      if (document.getElementById('1').value == 'X' && document.getElementById('2').value == 'X' && document.getElementById('3').value == 'X') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player X wins!');
+                        
+                      } else if (document.getElementById('4').value == 'X' && document.getElementById('5').value == 'X' && document.getElementById('6').value == 'X') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player X wins!');
+                      } else if (document.getElementById('7').value == 'X' && document.getElementById('8').value == 'X' && document.getElementById('9').value == 'X') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player X wins!');
+                      } else if (document.getElementById('1').value == 'X' && document.getElementById('4').value == 'X' && document.getElementById('7').value == 'X') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player X wins!');
+                      } else if (document.getElementById('2').value == 'X' && document.getElementById('5').value == 'X' && document.getElementById('8').value == 'X') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player X wins!');
+                      } else if (document.getElementById('3').value == 'X' && document.getElementById('6').value == 'X' && document.getElementById('9').value == 'X') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player X wins!');
+                      } else if (document.getElementById('1').value == 'X' && document.getElementById('5').value == 'X' && document.getElementById('9').value == 'X') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player X wins!');
+                      } else if (document.getElementById('3').value == 'X' && document.getElementById('5').value == 'X' && document.getElementById('7').value == 'X') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player X wins!');
+                      } else if (document.getElementById('1').value == 'O' && document.getElementById('2').value == 'O' && document.getElementById('3').value == 'O') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player O wins!');
+                      } else if (document.getElementById('4').value == 'O' && document.getElementById('5').value == 'O' && document.getElementById('6').value == 'O') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player O wins!');
+                      } else if (document.getElementById('7').value == 'O' && document.getElementById('8').value == 'O' && document.getElementById('9').value == 'O') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player O wins!');
+                      } else if (document.getElementById('1').value == 'O' && document.getElementById('4').value == 'O' && document.getElementById('7').value == 'O') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player O wins!');
+                      } else if (document.getElementById('2').value == 'O' && document.getElementById('5').value == 'O' && document.getElementById('8').value == 'O') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player O wins!');
+                      } else if (document.getElementById('3').value == 'O' && document.getElementById('6').value == 'O' && document.getElementById('9').value == 'O') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player O wins!');
+                      } else if (document.getElementById('1').value == 'O' && document.getElementById('5').value == 'O' && document.getElementById('9').value == 'O') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player O wins!');
+                      } else if (document.getElementById('3').value == 'O' && document.getElementById('5').value == 'O' && document.getElementById('7').value == 'O') {
+                        document.getElementById('1').value = "";
+                        document.getElementById('2').value = "";
+                        document.getElementById('3').value = "";
+                        document.getElementById('4').value = "";
+                        document.getElementById('5').value = "";
+                        document.getElementById('6').value = "";
+                        document.getElementById('7').value = "";
+                        document.getElementById('8').value = "";
+                        document.getElementById('9').value = "";
+                        alert('Player O wins!');
+                      }
+
+}
+                
+            </script>
 
     
     
