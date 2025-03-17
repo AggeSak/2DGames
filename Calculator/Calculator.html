@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> This is a Calculator</title>
+    <title>This is a Calculator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Aggelos" content="Calculator device with basic mathematical operations">
     <meta name="keywords" content="Calculator, Math, Mathematics, Basic operations, Add, Subtract, Multiply, Divide">
-
 
     <style>
         body {
@@ -49,6 +48,12 @@
             background-color: lightgray;
         }
 
+        input[type="button"].big-button {
+            width: 120px;
+            height: 60px;
+            font-size: 25px;
+            background-color: rgb(59, 42, 9);
+        }
     </style>
 </head>
 
@@ -56,9 +61,8 @@
 
     <h1>Calculator</h1>
 
-     <form name = MyCalculator>
-
-        <input type="text" name="display" id="display" >
+    <form name="MyCalculator" id="MyCalculator">
+        <input type="text" name="display" id="display">
         <br>
         <input type="button" value="C" onclick="document.getElementById('display').value = ''">
         <input type="button" value="1" onclick="MyCalculator.display.value += '1'">
@@ -78,13 +82,59 @@
         <input type="button" value="-" onclick="MyCalculator.display.value += '-'">
         <input type="button" value="*" onclick="MyCalculator.display.value += '*'">
         <input type="button" value="/" onclick="MyCalculator.display.value += '/'">
-        <input type="button" value="=" onclick="MyCalculator.display.value = eval(MyCalculator.display.value)">
-       
-        
-     </form>
+        <input type="button" value="=" onclick="evaluateExpressionSafe()">
+    </form>
 
+    <h2>Go to Scientific Mode</h2>
+    <input type="button" value="Scientific" onclick="addScientificFunctions()" class="big-button">
+
+    <script>
+        // Function to evaluate the expression safely
+        function evaluateExpressionSafe() {
+            let input = document.getElementById('display').value;
+
+            // Replace functions with JavaScript equivalents
+            input = input.replace(/sin\(/g, "Math.sin(")
+                .replace(/cos\(/g, "Math.cos(")
+                .replace(/tan\(/g, "Math.tan(")
+                .replace(/log\(/g, "Math.log(")
+                .replace(/√/g, "Math.sqrt")
+                .replace(/\^/g, "**"); // Support for exponentiation
+
+            try {
+                let result = new Function("return " + input)(); // Safe evaluation
+                document.getElementById('display').value = result;
+            } catch (error) {
+                document.getElementById('display').value = "Error";
+            }
+        }
+
+        // Add scientific functions to the calculator
+        function addScientificFunctions() {
+            let calculator = document.getElementById("MyCalculator");
+
+            if (!document.getElementById("scientificButtons")) {
+                let scientificDiv = document.createElement("div");
+                scientificDiv.id = "scientificButtons";
+                scientificDiv.innerHTML = `
+                    <input type="button" value="sin" onclick="MyCalculator.display.value += 'sin('">
+                    <input type="button" value="cos" onclick="MyCalculator.display.value += 'cos('">
+                    <input type="button" value="tan" onclick="MyCalculator.display.value += 'tan('">
+                    <input type="button" value="log" onclick="MyCalculator.display.value += 'log('">
+                    <br>
+                    <input type="button" value="√" onclick="MyCalculator.display.value += '√('">
+                    <input type="button" value="x²" onclick="MyCalculator.display.value += '^2'">
+                    <input type="button" value="x³" onclick="MyCalculator.display.value += '^3'">
+                    <input type="button" value="π" onclick="MyCalculator.display.value += '3.14'">
+                    <br>
+                    <input type="button" value="(" onclick="MyCalculator.display.value += '('">
+                    <input type="button" value=")" onclick="MyCalculator.display.value += ')'">
+                    <input type="button" value="e" onclick="MyCalculator.display.value += '2.71828'" style="width: 70px; height: 50px; font-size: 20px;">
+                `;
+                calculator.appendChild(scientificDiv);
+            }
+        }
+    </script>
 
 </body>
-
-
 </html>
