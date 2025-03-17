@@ -139,11 +139,32 @@
         }
 
         function drawSnake() {
-            snake.forEach((segment, index) => {
-                ctx.fillStyle = index === 0 ? 'red' : 'blue';
-                ctx.fillRect(segment.x, segment.y, box, box);
-            });
+    snake.forEach((segment, index) => {
+        ctx.fillStyle = index === 0 ? 'black' : 'darkgreen';
+        ctx.fillRect(segment.x, segment.y, box, box);
+        ctx.strokeStyle = 'white';
+        ctx.strokeRect(segment.x, segment.y, box, box);  
+
+        // Add Eyes & Fangs to Head
+        if (index === 0) {
+            ctx.fillStyle = "white"; 
+            ctx.beginPath();
+            ctx.arc(segment.x + 5, segment.y + 5, 2, 0, 2 * Math.PI);
+            ctx.arc(segment.x + 15, segment.y + 5, 2, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Draw Fangs 🦷
+            ctx.fillStyle = "white";
+            ctx.fillRect(segment.x + 6, segment.y + 18, 2, 5); // Left Fang
+            ctx.fillRect(segment.x + 14, segment.y + 18, 2, 5); // Right Fang
+
+            // Draw Tongue 👅
+            ctx.fillStyle = "red";
+            ctx.fillRect(segment.x + 10, segment.y + 20, 2, 8);
         }
+    });
+}
+
 
         function moveSnake() {
             const head = {
