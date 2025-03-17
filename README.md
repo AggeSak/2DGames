@@ -29,5 +29,5 @@ To use this project navigade with cd command to the game of your choice and run 
 
 4. ### **Images of the Games** <a name="screenshots"></a>
 
-<img src="Images/Calculator.png" alt="Calculator" width="50%" />
+<img src="Images/Calculator.png" alt="Calculator" width="25%" />
 
