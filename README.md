@@ -30,6 +30,7 @@ To use this project navigade with cd command to the game of your choice and run 
 <div style="display: flex; justify-content: space-around;">
     <img src="Images/Calculator.png" alt="Calculator" width="15%" />
     <img src="Images/tictactoe.png" alt="Tic Tac Toe" width="15%" />
+   <img src="Images/Snake.png" alt="Snake" width="15%" />
 </div>
 
 
