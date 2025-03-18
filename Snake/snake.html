@@ -24,6 +24,7 @@
         }
 
         canvas {
+            
             border: 2px solid white;
             margin-top: 20px;
         }
@@ -194,9 +195,23 @@
         }
 
         function drawFood() {
-            ctx.fillStyle = 'yellow';
-            ctx.fillRect(food.x, food.y, box, box);
-        }
+    // Draw apple body (red circle)
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.arc(food.x + box / 2, food.y + box / 2, box / 2.5, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Draw apple stem (brown rectangle)
+    ctx.fillStyle = 'brown';
+    ctx.fillRect(food.x + box / 2 - 2, food.y + 2, 4, 6);
+
+    // Draw apple leaf (small green oval)
+    ctx.fillStyle = 'green';
+    ctx.beginPath();
+    ctx.ellipse(food.x + box / 2 + 5, food.y + 2, 4, 6, Math.PI / 4, 0, 2 * Math.PI);
+    ctx.fill();
+}
+
 
         function changeDirection(event) {
             if (event.key === 'ArrowRight' && currentDirection !== directions.left) {
