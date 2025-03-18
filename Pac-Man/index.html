@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .grid {
+            width: 560px;
+            height: 560px;
+            border: 2px solid #000;
+            display: flex;
+            flex-wrap: wrap;
+            background: #000;
+        }
+
+        .grid div {
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+        }
+
+        .wall {
+            background: #2238FF;
+            border: 2px solid #1A237E;
+        }
+
+        .pac-dot {
+            width: 6px;
+            height: 6px;
+            background: #FFD700;
+            border-radius: 50%;
+            margin: 7px;
+        }
+
+        .power-pellet {
+            width: 16px;
+            height: 16px;
+            background: #FF4081;
+            border-radius: 50%;
+            margin: 2px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .pac-man {
+            background: #FFEE58;
+            border-radius: 50%;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 
+                0 50%, 50% 50%, 50% 45%, 0 45%);
+            animation: chew 0.3s infinite alternate;
+        }
+
+        .ghost {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 10px 10px 2px 2px;
+            animation: float 2s infinite;
+        }
+
+        .ghost::before,
+        .ghost::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            top: 4px;
+        }
+
+        .ghost::before { left: 3px; }
+        .ghost::after { right: 3px; }
+
+        .ghost .pupil {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #0000FF;
+            border-radius: 50%;
+            top: 5px;
+        }
+
+        .blinky { background: #ED1B24; }
+        .pinky { background: #FFB8FF; }
+        .inky { background: #00FFFF; }
+        .clyde { background: #FFB852; }
+
+        @keyframes chew {
+            0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 
+                0 40%, 50% 40%, 50% 60%, 0 60%); }
+            100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 
+                0 50%, 50% 50%, 50% 50%, 0 50%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.8); opacity: 0.8; }
+            50% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Score: <span id="score">0</span></h1>
+    <div class="grid"></div>
+
+    <script>
+        const scoreDisplay = document.getElementById('score');
+        const width = 28;
+        const grid = document.querySelector('.grid');
+        let score = 0;
+        let pacmanCurrentIndex = 490;
+        const squares = [];
+        const ghosts = [
+            { class: 'blinky', currentIndex: 348, element: null },
+            { class: 'pinky', currentIndex: 376, element: null },
+            { class: 'inky', currentIndex: 379, element: null },
+            { class: 'clyde', currentIndex: 382, element: null }
+        ];
+
+        // Initialize game board
+        const layout = [/* Your layout array here */];
+
+        function createBoard() {
+            for (let i = 0; i < layout.length; i++) {
+                const square = document.createElement('div');
+                grid.appendChild(square);
+                squares.push(square);
+
+                if (layout[i] === 0) square.classList.add('pac-dot');
+                else if (layout[i] === 1) square.classList.add('wall');
+                else if (layout[i] === 3) square.classList.add('power-pellet');
+            }
+            squares[pacmanCurrentIndex].classList.add('pac-man');
+            createGhosts();
+        }
+
+        function createGhosts() {
+            ghosts.forEach(ghost => {
+                const ghostElement = document.createElement('div');
+                ghostElement.className = `ghost ${ghost.class}`;
+                ghostElement.innerHTML = `
+                    <div class="pupil" style="left: 4px;"></div>
+                    <div class="pupil" style="right: 4px;"></div>
+                `;
+                squares[ghost.currentIndex].appendChild(ghostElement);
+                ghost.element = ghostElement;
+            });
+        }
+
+        function movePacman(e) {
+            squares[pacmanCurrentIndex].classList.remove('pac-man');
+            let newIndex = pacmanCurrentIndex;
+
+            switch(e.key) {
+                case 'ArrowUp': newIndex -= width; break;
+                case 'ArrowDown': newIndex += width; break;
+                case 'ArrowLeft': newIndex--; break;
+                case 'ArrowRight': newIndex++; break;
+                default: return;
+            }
+
+            if (isValidMove(newIndex)) {
+                pacmanCurrentIndex = newIndex;
+                checkTunnel();
+                checkCollisions();
+                checkDots();
+            }
+
+            squares[pacmanCurrentIndex].classList.add('pac-man');
+        }
+
+        function isValidMove(index) {
+            return index >= 0 && 
+                   index < width * width && 
+                   !squares[index].classList.contains('wall');
+        }
+
+        function checkTunnel() {
+            if (pacmanCurrentIndex === 364) pacmanCurrentIndex = 391;
+            if (pacmanCurrentIndex === 391) pacmanCurrentIndex = 364;
+        }
+
+        function checkDots() {
+            const currentSquare = squares[pacmanCurrentIndex];
+            if (currentSquare.classList.contains('pac-dot')) {
+                currentSquare.classList.remove('pac-dot');
+                score += 10;
+                scoreDisplay.textContent = score;
+            }
+            if (currentSquare.classList.contains('power-pellet')) {
+                currentSquare.classList.remove('power-pellet');
+                score += 50;
+                scoreDisplay.textContent = score;
+            }
+        }
+
+        function moveGhosts() {
+            ghosts.forEach(ghost => {
+                const directions = [-1, 1, -width, width];
+                const direction = directions[Math.floor(Math.random() * directions.length)];
+                const newIndex = ghost.currentIndex + direction;
+
+                if (isValidMove(newIndex)) {
+                    squares[ghost.currentIndex].removeChild(ghost.element);
+                    ghost.currentIndex = newIndex;
+                    squares[newIndex].appendChild(ghost.element);
+                }
+            });
+        }
+
+        function checkCollisions() {
+            ghosts.forEach(ghost => {
+                if (ghost.currentIndex === pacmanCurrentIndex) {
+                    alert('Game Over!');
+                    location.reload();
+                }
+            });
+        }
+
+        // Initialize game
+        createBoard();
+        document.addEventListener('keyup', movePacman);
+        setInterval(moveGhosts, 1000);
+    </script>
+</body>
+</html>

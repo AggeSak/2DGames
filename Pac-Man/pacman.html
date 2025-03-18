@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man Game 🎮👾🟡</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+        }
+
+        .grid {
+            width: 560px;
+            height: 560px;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px auto;
+            border: 3px solid yellow;
+            background-color: #000;
+        }
+
+        .grid div {
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+        }
+
+        .pac-dot {
+            background-color: white;
+            border-radius: 50%;
+            width: 5px;
+            height: 5px;
+            margin: auto;
+        }
+
+        .wall {
+            background-color: blue;
+        }
+
+        .ghost-lair {
+            background-color: pink;
+        }
+
+        .power-pellet {
+            background-color: red;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            margin: auto;
+        }
+
+        .pac-man {
+            background-color: yellow;
+            border-radius: 50%;
+        }
+
+        .ghost {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .blinky {
+            background-color: red;
+        }
+
+        .pinky {
+            background-color: pink;
+        }
+
+        .inky {
+            background-color: cyan;
+        }
+
+        .clyde {
+            background-color: orange;
+        }
+
+        .scared-ghost {
+            background-color: blue;
+            animation: flicker 0.3s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Score: <span id="score">0</span></h1>
+<div class="grid"></div>
+
+<script>
+    const scoreDisplay = document.getElementById('score');
+    const width = 28;
+    const grid = document.querySelector('.grid');
+    let score = 0;
+
+    const layout = [
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
+        1,3,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,3,1,
+        1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,
+        1,0,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+    ];
+
+    const squares = [];
+
+    function createBoard() {
+        for (let i = 0; i < layout.length; i++) {
+            const square = document.createElement('div');
+            grid.appendChild(square);
+            squares.push(square);
+
+            if (layout[i] === 0) {
+                squares[i].classList.add('pac-dot');
+            } else if (layout[i] === 1) {
+                squares[i].classList.add('wall');
+            } else if (layout[i] === 3) {
+                squares[i].classList.add('power-pellet');
+            }
+        }
+    }
+    createBoard();
+
+    let pacmanCurrentIndex = 49;
+    squares[pacmanCurrentIndex].classList.add('pac-man');
+
+    function movePacman(e) {
+        squares[pacmanCurrentIndex].classList.remove('pac-man');
+        switch (e.key) {
+            case 'ArrowUp':
+                
+                if (!squares[pacmanCurrentIndex - width].classList.contains('wall')) 
+                    pacmanCurrentIndex -= width;
+                break;
+            case 'ArrowDown':
+                if (!squares[pacmanCurrentIndex + width].classList.contains('wall')) 
+                    pacmanCurrentIndex += width;
+                break;
+            case 'ArrowLeft':
+                if (!squares[pacmanCurrentIndex - 1].classList.contains('wall')) 
+                    pacmanCurrentIndex -= 1;
+                break;
+            case 'ArrowRight':
+                if (!squares[pacmanCurrentIndex + 1].classList.contains('wall')) 
+                    pacmanCurrentIndex += 1;
+                break;
+        }
+
+        squares[pacmanCurrentIndex].classList.add('pac-man');
+
+        if (squares[pacmanCurrentIndex].classList.contains('pac-dot')) {
+            squares[pacmanCurrentIndex].classList.remove('pac-dot');
+            score++;
+            scoreDisplay.textContent = score;
+        }
+        if (squares[pacmanCurrentIndex].classList.contains('power-pellet')) {
+            squares[pacmanCurrentIndex].classList.remove('power-pellet');
+            score += 10;
+            scoreDisplay.textContent = score;
+            ghosts.forEach(ghost => ghost.isScared = true);
+            setTimeout(() => {
+                ghosts.forEach(ghost => ghost.isScared = false);
+            }, 10000);
+        }
+        if (score === 100) {
+            window.alert('You win!');
+            ghosts.forEach(ghost => clearInterval(ghost.timerId));
+            document.removeEventListener('keydown', movePacman);
+        }
+    }
+
+    document.addEventListener('keydown', movePacman);
+
+    function moveGhost(ghostIndex, className) {
+        let directions = [-1, +1, -width, +width];
+        setInterval(() => {
+            let direction = directions[Math.floor(Math.random() * directions.length)];
+            if (!squares[ghostIndex + direction].classList.contains('wall')) {
+                squares[ghostIndex].classList.remove(className);
+                ghostIndex += direction;
+                squares[ghostIndex].classList.add(className);
+            }
+        }, 500);
+    }
+
+    moveGhost(40, 'blinky');
+    moveGhost(100, 'pinky');
+    moveGhost(150, 'inky');
+    moveGhost(200, 'clyde');
+
+</script>
+
+</body>
+</html>
